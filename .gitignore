@@ -27,3 +27,5 @@ npm-debug.log
 #eclipse
 .project
 .settings/
+
+dist/
