@@ -1,3 +1,4 @@
+import { Dot } from '@aurokk/vexflow'
 # VexTab Artist
 # Copyright 2012 Mohit Cheppudira <mohit@muthanna.com>
 #
@@ -334,12 +335,10 @@ class Artist
         if parts.length > 1 and parts[1] == "c"
           new_accidental.setAsCautionary()
 
-        # -> note.addModifier(f.Accidental({ type: accid }), 0)
-        #stave_note.addAccidental(index, new_accidental)
+        stave_note.addModifier(new_accidental, index)
 
     if @current_duration[@current_duration.length - 1] == "d"
-      console.log()
-      #stave_note.addDotToAll()
+      Vex.Dot.buildAndAttach([stave_note], {all: true})
 
     stave_note.setPlayNote(params.play_note) if params.play_note?
     stave_notes.push stave_note
@@ -355,8 +354,8 @@ class Artist
     tab_notes.push new_tab_note
 
     if @current_duration[@current_duration.length - 1] == "d"
-      console.log()
-      # new_tab_note.addDot()
+      Vex.Dot.buildAndAttach([new_tab_note])
+
 
   makeDuration = (time, dot) -> time + (if dot then "d" else "")
   setDuration: (time, dot=false) ->
@@ -794,8 +793,7 @@ class Artist
         auto_stem: false
       })
       if @current_duration[@current_duration.length - 1] == "d"
-        # tab_note.addDot(0)
-        console.log()
+        Vex.Dot.buildAndAttach([tab_note], {index: 0})
       tab_notes.push tab_note
     else
       tab_notes.push new Vex.Flow.GhostNote(@current_duration)
