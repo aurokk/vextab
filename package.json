@@ -7,6 +7,7 @@
     "url": "http://muthanna.com"
   },
   "main": "dist/main.prod.js",
+  "types": "dist/vextab.d.ts",
   "description": "A VexTab Parser for VexFlow",
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "@babel/preset-react": "^7.27.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
+    "@types/lodash": "^4.17.20",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.4.1",
     "babel-preset-es2015": "^6.24.1",
@@ -55,6 +57,8 @@
     "qunit": "^2.24.1",
     "semantic-release": "^24.2.9",
     "style-loader": "^1.3.0",
+    "ts-loader": "^8.4.0",
+    "typescript": "^5.9.3",
     "webpack": "^4.47.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.3",
@@ -64,12 +68,13 @@
     "url": "https://github.com/0xfe/vexflow/issues"
   },
   "scripts": {
-    "build": "webpack --progress --mode production --env.NODE_ENV=production --env.TAG_NAME=prod --config webpack.config.js",
-    "build-dev": "webpack --progress --mode development --env.NODE_ENV=development --env.TAG_NAME=dev --config webpack.config.js",
+    "build": "tsc && webpack --progress --mode production --env.NODE_ENV=production --env.TAG_NAME=prod --config webpack.config.js",
+    "build-dev": "tsc && webpack --progress --mode development --env.NODE_ENV=development --env.TAG_NAME=dev --config webpack.config.js",
     "start": "webpack-dev-server --progress --colors --mode development  --port 9005 --disable-host-check --env.NODE_ENV=development --env.TAG_NAME=dev --config webpack.config.js",
     "serve": "npx http-server -c 1 -p 8052",
     "watch": "webpack -w --progress --mode development --env.NODE_ENV=development --env.TAG_NAME=dev --config webpack.config.js",
-    "clean": "rm -rf ./dist/*"
+    "clean": "rm -rf ./dist/*",
+    "typecheck": "tsc --noEmit"
   },
   "homepage": "http://www.vexflow.com/vextab/",
   "keywords": [

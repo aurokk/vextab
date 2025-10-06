@@ -57,6 +57,11 @@ module.exports = (env) => {
     module: {
       rules: [
         {
+          test: /\.tsx?$/,
+          exclude: /node_modules/,
+          use: [{ loader: "ts-loader" }],
+        },
+        {
           test: /\.jsx?$/,
           exclude: /node_modules/,
           use: [
@@ -68,6 +73,9 @@ module.exports = (env) => {
         { test: /\.jison$/, use: [{ loader: "jison-loader" }] },
         { test: /\.css$/, use: ["style-loader", "css-loader"] },
       ],
+    },
+    resolve: {
+      extensions: ['.tsx', '.ts', '.js', '.jsx', '.coffee'],
     },
   };
 };

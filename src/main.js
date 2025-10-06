@@ -1,6 +1,6 @@
 import * as Vex from '@aurokk/vexflow';
-import Artist from './artist.coffee';
-import VexTab from './vextab.coffee';
+import Artist from './artist';
+import VexTab from './vextab';
 import Div from './div';
 
 export {

@@ -1,2 +1,7 @@
 node_modules/*
 vexflow
+dist
+src/**/*.ts
+src/**/*.coffee
+src/main.js
+src/div.js

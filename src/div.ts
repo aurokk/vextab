@@ -9,8 +9,34 @@ import VexTab from './vextab';
 
 import './vextab.css';
 
+declare const $: any;
+declare const window: any;
+declare const __VERSION: string;
+declare const __BRANCH: string;
+declare const __COMMITHASH: string;
+
 class Div {
-  constructor(sel) {
+  sel: string;
+  code: string;
+  width: number;
+  height: number;
+  scale: number;
+  rendererBackend: string;
+  canvas: any;
+  renderer: any;
+  ctx_sel: any;
+  ctx: any;
+  editor: string;
+  show_errors: string;
+  editor_width: number;
+  editor_height: number;
+  text_area: any;
+  editor_error: any;
+  timeoutID: number | null = null;
+  artist: Artist;
+  parser: VexTab;
+
+  constructor(sel: string) {
     this.sel = sel;
     if (!this.sel) {
       throw new Error(`VexTab.Div: invalid selector: ${sel}`);
@@ -27,7 +53,7 @@ class Div {
     // Get tabdiv properties
     this.width = parseInt($(sel).attr('width'), 10) || 400;
     this.height = parseInt($(sel).attr('height'), 10) || 200;
-    this.scale = parseFloat($(sel).attr('scale'), 10) || 1.0;
+    this.scale = parseFloat($(sel).attr('scale')) || 1.0;
     this.rendererBackend = $(sel).attr('renderer') || 'svg';
 
     // Raphael is deprecated. Use SVG if it's defined.
@@ -92,28 +118,33 @@ class Div {
     this.redraw();
   }
 
-  redraw() {
+  redraw(): this {
     const that = this;
-    Vex.BM('Total render time: ', () => {
+    if ((Vex as any).BM) {
+      (Vex as any).BM('Total render time: ', () => {
+        that.parse();
+        that.draw();
+      });
+    } else {
       that.parse();
       that.draw();
-    });
+    }
 
     return this;
   }
 
-  drawInternal() {
+  drawInternal(): this | any {
     if (!this.parser.isValid()) return this;
     return this.artist.draw(this.renderer);
   }
 
-  parseInternal() {
+  parseInternal(): this {
     try {
       this.artist.reset();
       this.parser.reset();
       this.parser.parse(this.code);
       this.editor_error.empty();
-    } catch (e) {
+    } catch (e: any) {
       if (this.editor_error) {
         this.editor_error.empty();
         this.editor_error.append(
@@ -128,31 +159,39 @@ class Div {
     return this;
   }
 
-  parse() {
-    Vex.BM('Parse time: ', () => {
+  parse(): this {
+    if ((Vex as any).BM) {
+      (Vex as any).BM('Parse time: ', () => {
+        this.parseInternal();
+      });
+    } else {
       this.parseInternal();
-    });
+    }
     return this;
   }
 
-  draw() {
-    Vex.BM('Draw time: ', () => {
+  draw(): this {
+    if ((Vex as any).BM) {
+      (Vex as any).BM('Draw time: ', () => {
+        this.drawInternal();
+      });
+    } else {
       this.drawInternal();
-    });
+    }
     return this;
   }
 }
 
-window.VEXTAB_SEL_V3 = 'div.vextab-auto';
+(window as any).VEXTAB_SEL_V3 = 'div.vextab-auto';
 
-function start(sel) {
+function start(sel?: string): void {
   // eslint-disable-next-line
   console.log("Running VexTab.Div:", __VERSION, __BRANCH, __COMMITHASH);
-  $(sel || window.VEXTAB_SEL_V3).forEach((s) => new Div(s));
+  $(sel || (window as any).VEXTAB_SEL_V3).forEach((s: string) => new Div(s));
 }
 
 $(() => {
-  if (window.VEXTAB_SEL_V3) {
+  if ((window as any).VEXTAB_SEL_V3) {
     start();
   }
 });
