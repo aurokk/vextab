@@ -3,7 +3,7 @@ VexTab Tests
 Copyright Mohit Cheppudira 2010 <mohit@muthanna.com>
 ###
 
-import Vex from 'vexflow';
+import * as Vex from '@aurokk/vexflow';
 import Artist from '../src/artist.coffee';
 import VexTab from '../src/vextab.coffee';
 
@@ -197,7 +197,8 @@ class VexTabTests
 
     # KEY SIGNATURE TESTS
 
-    for key of Vex.Flow.keySignature.keySpecs
+    console.log()
+    for key of Vex.Flow.getKeySignatures()
       assert.notEqual null, tab.parse("tabstave key=" + key)
       assert.notEqual null, tab.parse("tabstave notation=true key=" + key)
       assert.notEqual null, tab.parse("tabstave notation=true tablature=true key=" + key)

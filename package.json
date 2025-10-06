@@ -14,6 +14,7 @@
   },
   "license": "LicenseRef-LICENSE",
   "dependencies": {
+    "@aurokk/vexflow": "^1.0.3",
     "lodash": "^4.17.21",
     "vexflow": "^3.0.9"
   },

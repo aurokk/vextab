@@ -1,3 +1,4 @@
+import { Dot } from '@aurokk/vexflow'
 # VexTab Artist
 # Copyright 2012 Mohit Cheppudira <mohit@muthanna.com>
 #
@@ -5,7 +6,7 @@
 # parsed by Vex.Flow.VexTab.
 
 
-import Vex from 'vexflow'
+import * as Vex from '@aurokk/vexflow'
 import * as _ from 'lodash'
 
 class Artist
@@ -82,7 +83,7 @@ class Artist
       if k in valid_options
         @customizations[k] = v
       else
-        throw new Vex.RERR("ArtistError", "Invalid option '#{k}'")
+        throw new Vex.RuntimeError("ArtistError", "Invalid option '#{k}'")
 
     @last_y += parseInt(@customizations.space, 10)
     @last_y += 15 if @customizations.player is "true"
@@ -203,8 +204,8 @@ class Artist
     renderer.resize(@customizations.width * @customizations.scale,
         (@last_y + @options.bottom_spacing) * @customizations.scale)
     ctx = renderer.getContext()
-    ctx.scale(@customizations.scale, @customizations.scale)
     ctx.clear()
+    ctx.scale(@customizations.scale, @customizations.scale)
     ctx.setFont(@options.font_face, @options.font_size, "")
 
     @renderer_context = ctx
@@ -288,7 +289,7 @@ class Artist
         else
           accidental = if selected_note.accidental? then selected_note.accidental + "_c"
       else
-        throw new Vex.RERR("ArtistError", "Invalid value for option 'accidentals': #{@customizations.accidentals}")
+        throw new Vex.RuntimeError("ArtistError", "Invalid value for option 'accidentals': #{@customizations.accidentals}")
 
     new_note = selected_note.note
     new_octave = spec_props.octave
@@ -334,10 +335,10 @@ class Artist
         if parts.length > 1 and parts[1] == "c"
           new_accidental.setAsCautionary()
 
-        stave_note.addAccidental(index, new_accidental)
+        stave_note.addModifier(new_accidental, index)
 
     if @current_duration[@current_duration.length - 1] == "d"
-      stave_note.addDotToAll()
+      Vex.Dot.buildAndAttach([stave_note], {all: true})
 
     stave_note.setPlayNote(params.play_note) if params.play_note?
     stave_notes.push stave_note
@@ -353,7 +354,8 @@ class Artist
     tab_notes.push new_tab_note
 
     if @current_duration[@current_duration.length - 1] == "d"
-      new_tab_note.addDot()
+      Vex.Dot.buildAndAttach([new_tab_note])
+
 
   makeDuration = (time, dot) -> time + (if dot then "d" else "")
   setDuration: (time, dot=false) ->
@@ -435,7 +437,7 @@ class Artist
       for bend in v
         phrase.push bend
       tab_notes[@bend_start_index].addModifier(
-        new Vex.Flow.Bend(null, null, phrase), k)
+        new Vex.Flow.Bend(null, null, phrase), parseInt(k, 10))
 
     # Replace bent notes with ghosts (make them invisible)
     for tab_note in tab_notes[@bend_start_index+1..((tab_notes.length - 2) + offset)]
@@ -451,7 +453,7 @@ class Artist
     stave_notes = _.last(@staves).note_notes
     tab_notes = _.last(@staves).tab_notes
 
-    throw new Vex.RERR("ArtistError", "Not enough notes for tuplet") if stave_notes.length < notes
+    throw new Vex.RuntimeError("ArtistError", "Not enough notes for tuplet") if stave_notes.length < notes
     modifier = new Vex.Flow.Tuplet(stave_notes[stave_notes.length - notes..], {num_notes: tuplets})
     @stave_articulations.push modifier
 
@@ -474,7 +476,7 @@ class Artist
     else
       return null
 
-    badFingering = -> new Vex.RERR("ArtistError", "Bad fingering: #{parts[1]}")
+    badFingering = -> new Vex.RuntimeError("ArtistError", "Bad fingering: #{parts[1]}")
 
     for finger in fingers
       pieces = finger.match(/(\d+):([ablr]):([fs]):([^-.]+)/)
@@ -525,7 +527,7 @@ class Artist
         when "qd"
           type = TYPE.RASQUEDO_DOWN
         else
-          throw new Vex.RERR("ArtistError", "Invalid stroke type: #{parts[1]}")
+          throw new Vex.RuntimeError("ArtistError", "Invalid stroke type: #{parts[1]}")
       return new Vex.Flow.Stroke(type)
     else
       return null
@@ -593,7 +595,7 @@ class Artist
     tab_notes = stave.tab_notes
 
     if annotations.length > tab_notes.length
-      throw new Vex.RERR("ArtistError", "More annotations than note elements")
+      throw new Vex.RuntimeError("ArtistError", "More annotations than note elements")
 
     # Add text annotations
     if stave.tab
@@ -617,7 +619,7 @@ class Artist
     if stave.note
       for note, i in stave_notes[stave_notes.length - annotations.length..]
         score_articulation = @makeScoreArticulation(annotations[i])
-        note.addArticulation(0, score_articulation) if score_articulation?
+        note.addModifier(score_articulation, 0) if score_articulation?
 
         stroke = @makeStroke(annotations[i])
         note.addStroke(0, stroke) if stroke?
@@ -625,9 +627,10 @@ class Artist
         fingerings = @makeFingering(annotations[i])
         if fingerings?
           try
-            (note.addModifier(fingering.num, fingering.modifier) for fingering in fingerings)
+            (note.addModifier(fingering.modifier, fingering.num) for fingering in fingerings)
           catch e
-            throw new Vex.RERR("ArtistError", "Bad note number in fingering: #{annotations[i]}")
+            console.log(e)
+            throw new Vex.RuntimeError("ArtistError", "Bad note number in fingering: #{annotations[i]}")
 
   addTabArticulation: (type, first_note, last_note, first_indices, last_indices) ->
     L "addTabArticulations: ", type, first_note, last_note, first_indices, last_indices
@@ -716,7 +719,7 @@ class Artist
       score_modifier = new Vex.Flow.Articulation("am").setPosition(Vex.Flow.Modifier.Position.BELOW)
 
     _.last(tab_notes).addModifier(modifier, 0) if modifier?
-    _.last(score_notes)?.addArticulation(0, score_modifier) if score_modifier?
+    _.last(score_notes)?.addModifier(score_modifier, 0) if score_modifier?
 
 
   addArticulations: (articulations) ->
@@ -790,7 +793,7 @@ class Artist
         auto_stem: false
       })
       if @current_duration[@current_duration.length - 1] == "d"
-        tab_note.addDot(0)
+        Vex.Dot.buildAndAttach([tab_note], {index: 0})
       tab_notes.push tab_note
     else
       tab_notes.push new Vex.Flow.GhostNote(@current_duration)
@@ -849,7 +852,7 @@ class Artist
         [new_note, new_octave, accidental] = @getNoteForFret(note.fret, note.string)
         play_note = @tuning.getNoteForFret(note.fret, note.string).split("/")[0]
       else
-        throw new Vex.RERR("ArtistError", "No note specified")
+        throw new Vex.RuntimeError("ArtistError", "No note specified")
 
       play_octave = parseInt(new_octave, 10) + @current_octave_shift
 
@@ -895,7 +898,7 @@ class Artist
 
   addTextNote: (text, position=0, justification="center", smooth=true, ignore_ticks=false) ->
     voices = _.last(@staves).text_voices
-    throw new Vex.RERR("ArtistError", "Can't add text note without text voice") if _.isEmpty(voices)
+    throw new Vex.RuntimeError("ArtistError", "Can't add text note without text voice") if _.isEmpty(voices)
 
     font_face = @customizations["font-face"]
     font_size = @customizations["font-size"]
@@ -953,6 +956,9 @@ class Artist
       tablature: if element == "stave" then "false" else "true"
       strings: 6
 
+    if (typeof options.strings == 'string')
+      options.strings = parseInt(options.strings, 10)
+
     _.extend(opts, options)
     L "addStave: ", element, opts
 
@@ -1009,6 +1015,6 @@ class Artist
         @current_octave_shift = parseInt(words[1], 10)
         L "Octave shift: ", @current_octave_shift
       else
-        throw new Vex.RERR("ArtistError", "Invalid command '#{words[0]}' at line #{_l} column #{_c}")
+        throw new Vex.RuntimeError("ArtistError", "Invalid command '#{words[0]}' at line #{_l} column #{_c}")
 
 export default Artist

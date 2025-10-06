@@ -1,4 +1,4 @@
-import Vex from 'vexflow';
+import * as Vex from '@aurokk/vexflow';
 import Artist from './artist.coffee';
 import VexTab from './vextab.coffee';
 import Div from './div';

@@ -3,7 +3,7 @@
  * Copyright Mohit Muthanna 2010 <mohit@muthanna.com>
  */
 
-import Vex from 'vexflow';
+import * as Vex from '@aurokk/vexflow';
 import Artist from './artist.coffee';
 import VexTab from './vextab.coffee';
 
@@ -34,11 +34,17 @@ class Div {
     if (this.rendererBackend.toLowerCase() === 'canvas') {
       this.canvas = $('<canvas></canvas>').addClass('vex-canvas');
       $(sel).append(this.canvas);
-      this.renderer = new Vex.Flow.Renderer(this.canvas[0], Vex.Flow.Renderer.Backends.CANVAS);
+      this.renderer = new Vex.Flow.Renderer(
+        this.canvas[0],
+        Vex.Flow.Renderer.Backends.CANVAS,
+      );
     } else {
       this.canvas = $('<div></div>').addClass('vex-canvas');
       $(sel).append(this.canvas);
-      this.renderer = new Vex.Flow.Renderer(this.canvas[0], Vex.Flow.Renderer.Backends.SVG);
+      this.renderer = new Vex.Flow.Renderer(
+        this.canvas[0],
+        Vex.Flow.Renderer.Backends.SVG,
+      );
     }
 
     this.ctx_sel = $(sel).find('.vex-canvas');
@@ -55,7 +61,8 @@ class Div {
 
     const that = this;
     if (this.editor === 'true') {
-      this.text_area = $('<textarea></textarea>').addClass('editor')
+      this.text_area = $('<textarea></textarea>')
+        .addClass('editor')
         .val(this.code);
       this.editor_error = $('<div></div>').addClass('editor-error');
       $(sel).append($('<p/>')).append(this.editor_error);
@@ -65,14 +72,15 @@ class Div {
       this.text_area.keyup(() => {
         if (that.timeoutID) window.clearTimeout(that.timeoutID);
         that.timeoutID = window.setTimeout(() => {
-        // Draw only if code changed
+          // Draw only if code changed
           if (that.code !== that.text_area.val()) {
             that.code = that.text_area.val();
             that.redraw();
           }
         }, 250);
       });
-    } if (this.show_errors === 'true') {
+    }
+    if (this.show_errors === 'true') {
       this.editor_error = $('<div></div>').addClass('editor-error');
       $(sel).append($('<p/>')).append(this.editor_error);
     }
@@ -87,7 +95,8 @@ class Div {
   redraw() {
     const that = this;
     Vex.BM('Total render time: ', () => {
-      that.parse(); that.draw();
+      that.parse();
+      that.draw();
     });
 
     return this;
@@ -108,9 +117,11 @@ class Div {
       if (this.editor_error) {
         this.editor_error.empty();
         this.editor_error.append(
-          $('<div></div>').addClass('text').html(
-            `<h3>Oops!</h3> ${e.message.replace(/(?:\r\n|\r|\n)/g, '<br>')}`,
-          ),
+          $('<div></div>')
+            .addClass('text')
+            .html(
+              `<h3>Oops!</h3> ${e.message.replace(/(?:\r\n|\r|\n)/g, '<br>')}`,
+            ),
         );
       }
     }
@@ -118,12 +129,16 @@ class Div {
   }
 
   parse() {
-    Vex.BM('Parse time: ', () => { this.parseInternal(); });
+    Vex.BM('Parse time: ', () => {
+      this.parseInternal();
+    });
     return this;
   }
 
   draw() {
-    Vex.BM('Draw time: ', () => { this.drawInternal(); });
+    Vex.BM('Draw time: ', () => {
+      this.drawInternal();
+    });
     return this;
   }
 }
@@ -132,10 +147,14 @@ window.VEXTAB_SEL_V3 = 'div.vextab-auto';
 
 function start(sel) {
   // eslint-disable-next-line
-  console.log('Running VexTab.Div:', __VERSION, __BRANCH, __COMMITHASH);
+  console.log("Running VexTab.Div:", __VERSION, __BRANCH, __COMMITHASH);
   $(sel || window.VEXTAB_SEL_V3).forEach((s) => new Div(s));
 }
 
-$(() => { if (window.VEXTAB_SEL_V3) { start(); } });
+$(() => {
+  if (window.VEXTAB_SEL_V3) {
+    start();
+  }
+});
 
 export default Div;
