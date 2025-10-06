@@ -619,7 +619,7 @@ class Artist
     if stave.note
       for note, i in stave_notes[stave_notes.length - annotations.length..]
         score_articulation = @makeScoreArticulation(annotations[i])
-        # note.addArticulation(0, score_articulation) if score_articulation?
+        note.addModifier(score_articulation, 0) if score_articulation?
 
         stroke = @makeStroke(annotations[i])
         note.addStroke(0, stroke) if stroke?
@@ -627,9 +627,9 @@ class Artist
         fingerings = @makeFingering(annotations[i])
         if fingerings?
           try
-            console.log()
-            # (note.addModifier(fingering.num, fingering.modifier) for fingering in fingerings)
+            (note.addModifier(fingering.modifier, fingering.num) for fingering in fingerings)
           catch e
+            console.log(e)
             throw new Vex.RuntimeError("ArtistError", "Bad note number in fingering: #{annotations[i]}")
 
   addTabArticulation: (type, first_note, last_note, first_indices, last_indices) ->
