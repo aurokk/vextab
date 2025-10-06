@@ -437,7 +437,7 @@ class Artist
       for bend in v
         phrase.push bend
       tab_notes[@bend_start_index].addModifier(
-        new Vex.Flow.Bend(null, null, phrase), k)
+        new Vex.Flow.Bend(null, null, phrase), parseInt(k, 10))
 
     # Replace bent notes with ghosts (make them invisible)
     for tab_note in tab_notes[@bend_start_index+1..((tab_notes.length - 2) + offset)]
@@ -719,7 +719,7 @@ class Artist
       score_modifier = new Vex.Flow.Articulation("am").setPosition(Vex.Flow.Modifier.Position.BELOW)
 
     _.last(tab_notes).addModifier(modifier, 0) if modifier?
-    # _.last(score_notes)?.addArticulation(0, score_modifier) if score_modifier?
+    _.last(score_notes)?.addModifier(score_modifier, 0) if score_modifier?
 
 
   addArticulations: (articulations) ->
@@ -955,6 +955,8 @@ class Artist
       notation: if element == "tabstave" then "false" else "true"
       tablature: if element == "stave" then "false" else "true"
       strings: 6
+
+    options.strings = parseInt(options.strings, 10)
 
     _.extend(opts, options)
     L "addStave: ", element, opts
