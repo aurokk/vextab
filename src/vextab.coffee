@@ -6,7 +6,7 @@
 # Vex.Flow.Artist to render the notation.
 # parsed by Vex.Flow.VexTab.
 
-import Vex from 'vexflow'
+import * as Vex from '@aurokk/vexflow'
 import * as _ from 'lodash'
 import * as parser from './vextab.jison'
 
@@ -16,7 +16,7 @@ class VexTab
 
   # Private methods
   newError = (object, msg) ->
-    new Vex.RERR("ParseError",
+    new Vex.RuntimeError("ParseError",
                  "#{msg} in line #{object._l} column #{object._c}")
 
   # Public methods
@@ -32,6 +32,7 @@ class VexTab
   getArtist: -> return @artist
 
   parseStaveOptions: (options) ->
+    # console.log(Vex, Vex.Flow, Vex.Flow.keySignature, Vex.Flow.keySignature.keySpecs)
     params = {}
     return params unless options?
 
@@ -44,7 +45,7 @@ class VexTab
           notation_option = option
           throw error("'#{option.key}' must be 'true' or 'false'") if option.value not in ["true", "false"]
         when "key"
-          throw error("Invalid key signature '#{option.value}'") unless _.has(Vex.Flow.keySignature.keySpecs, option.value)
+          throw error("Invalid key signature '#{option.value}'") unless Vex.Flow.hasKeySignature(option.value)  # _.has(Vex.Flow.keySignature.keySpecs, option.value)
         when "clef"
           clefs = ["treble", "bass", "tenor", "alto", "percussion", "none"]
           throw error("'clef' must be one of #{clefs.join(', ')}") if option.value not in clefs

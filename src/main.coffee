@@ -1,4 +1,4 @@
-Vex = require 'vexflow'
+Vex = require '@aurokk/vexflow'
 Artist = require './artist.coffee'
 VexTab = require './vextab.coffee'
 
