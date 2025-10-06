@@ -197,7 +197,8 @@ class VexTabTests
 
     # KEY SIGNATURE TESTS
 
-    for key of Vex.Flow.keySignature.keySpecs
+    console.log()
+    for key of Vex.Flow.getKeySignatures()
       assert.notEqual null, tab.parse("tabstave key=" + key)
       assert.notEqual null, tab.parse("tabstave notation=true key=" + key)
       assert.notEqual null, tab.parse("tabstave notation=true tablature=true key=" + key)
