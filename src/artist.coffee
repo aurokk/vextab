@@ -436,8 +436,8 @@ class Artist
       phrase = []
       for bend in v
         phrase.push bend
-      # tab_notes[@bend_start_index].addModifier(
-      #   new Vex.Flow.Bend(null, null, phrase), k)
+      tab_notes[@bend_start_index].addModifier(
+        new Vex.Flow.Bend(null, null, phrase), k)
 
     # Replace bent notes with ghosts (make them invisible)
     for tab_note in tab_notes[@bend_start_index+1..((tab_notes.length - 2) + offset)]
