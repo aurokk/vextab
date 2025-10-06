@@ -956,7 +956,8 @@ class Artist
       tablature: if element == "stave" then "false" else "true"
       strings: 6
 
-    options.strings = parseInt(options.strings, 10)
+    if (typeof options.strings == 'string')
+      options.strings = parseInt(options.strings, 10)
 
     _.extend(opts, options)
     L "addStave: ", element, opts
