@@ -1,3 +1,11 @@
+## [1.0.2](https://github.com/aurokk/vextab/compare/v1.0.1...v1.0.2) (2025-10-06)
+
+
+### Bug Fixes
+
+* delete vexflow dependency ([6c02a9d](https://github.com/aurokk/vextab/commit/6c02a9d4ae24cc08d39babbf0a4f85001ad97083))
+* delete vexflow dependency ([430cb60](https://github.com/aurokk/vextab/commit/430cb6010f1ea28e1071b9a9106e51ef0fc6a5a2))
+
 ## [1.0.1](https://github.com/aurokk/vextab/compare/v1.0.0...v1.0.1) (2025-10-06)
 
 
