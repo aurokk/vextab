@@ -204,8 +204,8 @@ class Artist
     renderer.resize(@customizations.width * @customizations.scale,
         (@last_y + @options.bottom_spacing) * @customizations.scale)
     ctx = renderer.getContext()
-    ctx.scale(@customizations.scale, @customizations.scale)
     ctx.clear()
+    ctx.scale(@customizations.scale, @customizations.scale)
     ctx.setFont(@options.font_face, @options.font_size, "")
 
     @renderer_context = ctx
