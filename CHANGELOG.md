@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/aurokk/vextab/compare/v1.1.0...v1.1.1) (2025-10-07)
+
+
+### Bug Fixes
+
+* fix build ([9eb21bb](https://github.com/aurokk/vextab/commit/9eb21bb51e0e67c5bca8816bfe64d21977e8925b))
+
 # [1.1.0](https://github.com/aurokk/vextab/compare/v1.0.2...v1.1.0) (2025-10-07)
 
 
