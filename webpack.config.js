@@ -43,10 +43,10 @@ module.exports = (env) => {
     ],
     devtool: tag === "prod" ? "hidden-source-map" : "eval-source-map",
     entry: {
-      main: "./src/main.js",
-      div: "./src/div.js",
-      tests: "./tests/tests.coffee",
-      playground: "./tests/playground.js",
+      main: "./src/main.ts",
+      div: "./src/div.ts",
+      tests: "./tests/tests.ts",
+      playground: "./tests/playground.ts",
     },
     output: {
       library: "vextab",
@@ -57,6 +57,11 @@ module.exports = (env) => {
     module: {
       rules: [
         {
+          test: /\.tsx?$/,
+          exclude: /node_modules/,
+          use: [{ loader: "ts-loader" }],
+        },
+        {
           test: /\.jsx?$/,
           exclude: /node_modules/,
           use: [
@@ -64,10 +69,12 @@ module.exports = (env) => {
             { loader: "eslint-loader", options: { fix: true } },
           ],
         },
-        { test: /\.coffee$/, use: [{ loader: "coffee-loader" }] },
         { test: /\.jison$/, use: [{ loader: "jison-loader" }] },
         { test: /\.css$/, use: ["style-loader", "css-loader"] },
       ],
+    },
+    resolve: {
+      extensions: [".tsx", ".ts", ".js", ".jsx", ".jison"],
     },
   };
 };

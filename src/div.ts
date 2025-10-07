@@ -4,13 +4,38 @@
  */
 
 import * as Vex from '@aurokk/vexflow';
-import Artist from './artist.coffee';
-import VexTab from './vextab.coffee';
+import Artist from './artist';
+import VexTab from './vextab';
+
+declare const $: any;
+declare const __VERSION: string;
+declare const __BRANCH: string;
+declare const __COMMITHASH: string;
 
 import './vextab.css';
 
 class Div {
-  constructor(sel) {
+  sel: any;
+  code: string;
+  width: number;
+  height: number;
+  scale: number;
+  rendererBackend: string;
+  canvas: any;
+  renderer: any;
+  ctx_sel: any;
+  ctx: any;
+  editor: string;
+  show_errors: string;
+  editor_width: number;
+  editor_height: number;
+  text_area?: any;
+  editor_error?: any;
+  timeoutID?: number;
+  artist: any;
+  parser: any;
+
+  constructor(sel: any) {
     this.sel = sel;
     if (!this.sel) {
       throw new Error(`VexTab.Div: invalid selector: ${sel}`);
@@ -27,7 +52,7 @@ class Div {
     // Get tabdiv properties
     this.width = parseInt($(sel).attr('width'), 10) || 400;
     this.height = parseInt($(sel).attr('height'), 10) || 200;
-    this.scale = parseFloat($(sel).attr('scale'), 10) || 1.0;
+    this.scale = parseFloat($(sel).attr('scale')) || 1.0;
     this.rendererBackend = $(sel).attr('renderer') || 'svg';
 
     // Raphael is deprecated. Use SVG if it's defined.
@@ -51,7 +76,7 @@ class Div {
     this.renderer.resize(this.width, this.height);
     this.ctx = this.renderer.getContext();
     this.ctx.setBackgroundFillStyle(this.ctx_sel.css('background-color'));
-    this.ctx.scale(this.scale, this.scale);
+    this.ctx.scale(this.scale);
 
     // Grab editor properties
     this.editor = $(sel).attr('editor') || '';
@@ -93,12 +118,8 @@ class Div {
   }
 
   redraw() {
-    const that = this;
-    Vex.BM('Total render time: ', () => {
-      that.parse();
-      that.draw();
-    });
-
+    this.parse();
+    this.draw();
     return this;
   }
 
@@ -113,7 +134,7 @@ class Div {
       this.parser.reset();
       this.parser.parse(this.code);
       this.editor_error.empty();
-    } catch (e) {
+    } catch (e: any) {
       if (this.editor_error) {
         this.editor_error.empty();
         this.editor_error.append(
@@ -129,26 +150,28 @@ class Div {
   }
 
   parse() {
-    Vex.BM('Parse time: ', () => {
-      this.parseInternal();
-    });
+    this.parseInternal();
     return this;
   }
 
   draw() {
-    Vex.BM('Draw time: ', () => {
-      this.drawInternal();
-    });
+    this.drawInternal();
     return this;
+  }
+}
+
+declare global {
+  interface Window {
+    VEXTAB_SEL_V3: string;
   }
 }
 
 window.VEXTAB_SEL_V3 = 'div.vextab-auto';
 
-function start(sel) {
+function start(sel?: string) {
   // eslint-disable-next-line
   console.log("Running VexTab.Div:", __VERSION, __BRANCH, __COMMITHASH);
-  $(sel || window.VEXTAB_SEL_V3).forEach((s) => new Div(s));
+  $(sel || window.VEXTAB_SEL_V3).forEach((s: any) => new Div(s));
 }
 
 $(() => {
