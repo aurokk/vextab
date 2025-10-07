@@ -69,13 +69,12 @@ module.exports = (env) => {
             { loader: "eslint-loader", options: { fix: true } },
           ],
         },
-        { test: /\.coffee$/, use: [{ loader: "coffee-loader" }] },
         { test: /\.jison$/, use: [{ loader: "jison-loader" }] },
         { test: /\.css$/, use: ["style-loader", "css-loader"] },
       ],
     },
     resolve: {
-      extensions: [".tsx", ".ts", ".js", ".jsx", ".coffee", ".jison"],
+      extensions: [".tsx", ".ts", ".js", ".jsx", ".jison"],
     },
   };
 };
