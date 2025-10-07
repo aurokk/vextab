@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/aurokk/vextab/compare/v1.0.2...v1.1.0) (2025-10-07)
+
+
+### Features
+
+* rewrite to typescript ([6d875e8](https://github.com/aurokk/vextab/commit/6d875e87d04af76bc0d5b3b147999c698e536bf2))
+
 ## [1.0.2](https://github.com/aurokk/vextab/compare/v1.0.1...v1.0.2) (2025-10-06)
 
 
