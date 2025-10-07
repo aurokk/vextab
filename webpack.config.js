@@ -59,7 +59,17 @@ module.exports = (env) => {
         {
           test: /\.tsx?$/,
           exclude: /node_modules/,
-          use: [{ loader: "ts-loader" }],
+          use: [
+            {
+              loader: "ts-loader",
+              options: {
+                compilerOptions: {
+                  declaration: true,
+                  declarationMap: true,
+                },
+              },
+            },
+          ],
         },
         {
           test: /\.jsx?$/,
