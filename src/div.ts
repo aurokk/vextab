@@ -166,7 +166,9 @@ declare global {
   }
 }
 
-window.VEXTAB_SEL_V3 = 'div.vextab-auto';
+if (typeof window !== 'undefined') {
+  window.VEXTAB_SEL_V3 = 'div.vextab-auto';
+}
 
 function start(sel?: string) {
   // eslint-disable-next-line
@@ -174,10 +176,12 @@ function start(sel?: string) {
   $(sel || window.VEXTAB_SEL_V3).forEach((s: any) => new Div(s));
 }
 
-$(() => {
-  if (window.VEXTAB_SEL_V3) {
-    start();
-  }
-});
+if (typeof $ !== 'undefined') {
+  $(() => {
+    if (typeof window !== 'undefined' && window.VEXTAB_SEL_V3) {
+      start();
+    }
+  });
+}
 
 export default Div;
