@@ -331,7 +331,7 @@ class Player {
   stop(): void {
     this.L('Stop');
 
-    if (this.interval_id !== null) {
+    if (this.interval_id !== null && typeof window !== 'undefined') {
       window.clearInterval(this.interval_id);
     }
 
@@ -360,7 +360,9 @@ class Player {
 
     MIDI.programChange(0, INSTRUMENTS[this.options.instrument]);
     this.render(); // try to update, maybe notes were changed dynamically
-    this.interval_id = window.setInterval(() => this.refresh(), this.refresh_rate);
+    if (typeof window !== 'undefined') {
+      this.interval_id = window.setInterval(() => this.refresh(), this.refresh_rate);
+    }
   }
 
   play(): void {
