@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/aurokk/vextab/compare/v1.1.2...v1.1.3) (2025-10-07)
+
+
+### Bug Fixes
+
+* server side rendering ([#6](https://github.com/aurokk/vextab/issues/6)) ([a09b7eb](https://github.com/aurokk/vextab/commit/a09b7ebe9cdb8c78ec0514647ea108b0bd39208b))
+
 ## [1.1.2](https://github.com/aurokk/vextab/compare/v1.1.1...v1.1.2) (2025-10-07)
 
 
