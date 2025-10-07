@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/aurokk/vextab/compare/v1.1.1...v1.1.2) (2025-10-07)
+
+
+### Bug Fixes
+
+* add typings ([#5](https://github.com/aurokk/vextab/issues/5)) ([097eb02](https://github.com/aurokk/vextab/commit/097eb0220653232eba85bc5bc19304c6c3387071))
+
 ## [1.1.1](https://github.com/aurokk/vextab/compare/v1.1.0...v1.1.1) (2025-10-07)
 
 
